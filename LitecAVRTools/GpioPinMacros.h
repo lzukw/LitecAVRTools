@@ -1,0 +1,566 @@
+/*
+    GpioPinMacros.h - Macros for naming and manipulating Arduino pins and
+    ports.
+    For AVR ATMega328p (Arduino Uno) and ATMega2560 (Arduino Mega).
+    This is part of the LitecAVRTools library (a fork of the 
+    AVRTools-library from Igor Mikolic-Torreira).
+
+    Copyright (c) 2014 Igor Mikolic-Torreira.  All right reserved.
+    Copyright (c) 2018 Wolfgang Zukrigl
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/*!
+ *  \file
+ *
+ *  \brief This file contains the primary macros for naming and
+ *  manipulating GPIO pin names.
+ *
+ */
+
+
+
+#ifndef GpioPinMacros_h
+#define GpioPinMacros_h
+
+
+#include <avr/io.h>
+
+
+
+/*! \brief Constants for digital values representing LOW and HIGH
+ *
+ */
+
+enum
+{
+    cLow = 0,        //!< Value representing digital LOW
+    cHigh = 1        //!< Value representing digital HIGH
+};
+
+
+
+
+
+/*
+
+    These macros are implementation details for the port naming macros and are not intended
+    for end-users.  These are required to make the macros work due to the
+    reparsing and resubstitution rules of the C/C++ preprocessor.
+
+*/
+
+////////////////////////////////////////////////////////////////////////
+// Internal macros for single pins
+////////////////////////////////////////////////////////////////////////
+
+#define _GpioPin( ddr, port, pin, nbr )     \
+                                        ddr, port, pin, nbr
+
+#define _isGpioPinModeOutput( ddr, port, pin, nbr )        ( ddr & (1<<nbr) )
+
+#define _isGpioPinModeInput( ddr, port, pin, nbr )         (!( ddr & (1<<nbr) ))
+
+#define _setGpioPinModeOutput( ddr, port, pin, nbr )       ddr |= (1<<nbr)
+
+#define _setGpioPinModeInput( ddr, port, pin, nbr )        ddr &= ~(1<<nbr), port &= ~(1<<nbr)
+
+#define _setGpioPinModeInputPullup( ddr, port, pin, nbr )  ddr &= ~(1<<nbr), port |= (1<<nbr)
+
+#define _readGpioPinDigital( ddr, port, pin, nbr )         ( (pin & (1<<nbr)) >>nbr )
+
+#define _writeGpioPinDigital( ddr, port, pin, nbr, value )     \
+                                        do { if (value) port |= (1<<nbr); else port &= ~(1<<nbr); } while ( 0 )
+
+#define _setGpioPinHigh( ddr, port, pin, nbr )             port |= (1<<nbr)
+
+#define _setGpioPinLow( ddr, port, pin, nbr )              port &= ~(1<<nbr)
+
+#define _toggleGpioPin( ddr, port, pin, nbr )              port ^= (1<<nbr)
+
+#define _getGpioDDR( ddr, port, pin, nbr )                 ddr
+
+#define _getGpioPORT( ddr, port, pin, nbr )                port
+
+#define _getGpioPIN( ddr, port, pin, nbr )                 pin
+
+#define _getGpioMASK( ddr, port, pin, nbr )                (1<<nbr)
+
+////////////////////////////////////////////////////////////////////////
+// Internal macros for whole ports (8 pins together)
+////////////////////////////////////////////////////////////////////////
+
+#define _GpioPort( ddr, port, pin )  \
+                            ddr, port, pin
+                                        
+#define _setGpioPortMode( ddr, port, pin, mode, mask )                         ddr |= (mode & mask), ddr &= ~( ~mode & mask )
+
+#define _setGpioPortPullup( ddr, port, pin, pullup, mask )                      port |= (pullup & mask), port &= ~( ~pullup & mask )
+
+#define _writeGpioPort( ddr, port, pin, voltageLevels, mask )                   port |= (voltageLevels & mask), port &= ~( ~voltageLevels & mask )
+
+#define _readGpioPort( ddr, port, pin, mask )                                   ( pin & mask )
+
+#define _toggleGpioPort( ddr, port, pin, mask )                                 port ^= mask
+
+/*
+
+    These macros are for end-users to name GPIO pins and manipulate GPIO pin name macros.
+
+*/
+
+
+////////////////////////////////////////////////////////////////////////
+// End-user macros for single GPIO-pins
+////////////////////////////////////////////////////////////////////////
+
+/*!
+ * \brief Primary macro-function for defining a GPIO pin name
+ *
+ * \arg \c portLtr an uppercase letter identifying the port (e.g., A, B, C, ...) the GPIO pin belongs to.
+ * \arg \c pinNbr a number between 0 and 7 identifying the bit on that port that corresponds to the GPIO pin.
+ *
+ * \hideinitializer
+ */
+
+#define GpioPin( portLtr, pinNbr )          \
+                                        _GpioPin( DDR##portLtr, PORT##portLtr, PIN##portLtr, pinNbr  )
+
+
+
+/*!
+ * \brief Test if the mode of the GPIO pin is output (i.e., the corresponding DDRn bit is set).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define isGpioPinModeOutput( pinName )                                         _isGpioPinModeOutput( pinName )
+
+
+
+/*!
+ * \brief Test if the mode of the GPIO pin is input (i.e., the corresponding DDRn is clear).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define isGpioPinModeInput( pinName )                                          _isGpioPinModeInput( pinName )
+
+
+
+/*!
+ * \brief Set the mode of the GPIO pin to output (i.e., set the corresponding DDRn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define setGpioPinModeOutput( pinName )                                         _setGpioPinModeOutput( pinName )
+
+
+
+/*!
+ * \brief Set the mode of the GPIO pin to input (i.e., clear the corresponding DDRn and PORTn bits).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define setGpioPinModeInput( pinName )                                          _setGpioPinModeInput( pinName )
+
+
+
+/*!
+ * \brief Set the mode of the GPIO pin to input with pullup (i.e., clear the corresponding DDRn bit and set the PORTn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define setGpioPinModeInputPullup( pinName )                                    _setGpioPinModeInputPullup( pinName )
+
+
+
+/*!
+ * \brief Read the value of the GPIO pin (i.e., return the value of correspoinding the PINn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \returns 0 (false) or a non-zero (true) value
+ *
+ * \hideinitializer
+ */
+
+#define readGpioPinDigital( pinName )                                           _readGpioPinDigital( pinName )
+
+
+/*!
+ * \brief Write a value the GPIO pin (i.e., set or clear the correspoinding the PORTn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ * \arg \c val the value to be written: 0 means to clear the GPIO pin; any other value means to set it.
+ *
+ * \hideinitializer
+ */
+
+#define writeGpioPinDigital( pinName, val )                                     _writeGpioPinDigital( pinName, val )
+
+
+
+/*!
+ * \brief Write a 1 to the GPIO pin (i.e., set the correspoinding the PORTn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define setGpioPinHigh( pinName )                                               _setGpioPinHigh( pinName )
+
+
+
+/*!
+ * \brief Write a 0 the GPIO pin (i.e., clear the corresponding the PORTn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define setGpioPinLow( pinName )                                                _setGpioPinLow( pinName )
+
+
+
+/*!
+ * \brief Toggle the voltage-level of  the GPIO output-pin (i.e., toggle the corresponding the PORTn bit).
+ *
+ * \arg \c pinName a GPIO pin name macro generated by either GpioPin(), GpioPinAnalog(), or GpioPinPwm().
+ *
+ * \hideinitializer
+ */
+
+#define toggleGpioPin( pinName )                                                _toggleGpioPin( pinName )
+
+
+
+////////////////////////////////////////////////////////////////////////
+// End-user macros for whole ports (8 pins together)
+////////////////////////////////////////////////////////////////////////
+
+/*!
+ * \brief Primary macro-function for defining a GPIO port name
+ *
+ * \arg \c portLtr an uppercase letter identifying the port (e.g., A, B, C, ...)
+ *
+ * \hideinitializer
+ */
+
+#define GpioPort( portLtr )   \
+                      _GpioPort( DDR##portLtr, PORT##portLtr, PIN##portLtr )
+
+/*!
+ * \brief Sets the mode of some (or all) of the pins of a GPIO-port to inputs or outputs
+ *
+ * \arg \c portName A GPIO Port name macro generated by GpioPport()
+ *
+ * \arg \c mode An 8-Bit-value. If a bit in `mode` is 1, and the corresponding bit in `mask` is also 1, the
+ *         corresponding pin will be an output. If a bit in `mode` is 0, and the corresponding bit in `mask` is 1, the
+ *         corresponding pin will be an input.
+ * \arg \c mask Only those GPIO-pins of a GPIO-port are modified, whose corresponding bit in `mask` is 1.
+ *
+ * \hideinitializer
+ */
+#define setGpioPortMode( portName , mode, mask) \
+                      _setGpioPortMode( portName , mode, mask )
+
+
+
+/*!
+ * \brief Activates or deactivates the internal pullup-resistors of some (or all) of the pins of a GPIO-port.
+ * Modified pins should be inputs!
+ *
+ * \arg \c portName A GPIO Port name macro generated by GpioPport()
+ *
+ * \arg \c pullup An 8-Bit-value. If a bit in `pullup` is 1, and the corresponding bit in `mask` is also 1, the
+ *         internal pullup-resistor of the corresponding pin will be activated. If a bit in `pullup` is 0, and the
+ *         corresponding bit in `mask` is 1, the internal pullup-resistor of the corresponding pin will be deactivated.
+ * \arg \c mask Only those GPIO-pins of a GPIO-port are modified, whose corresponding bit in `mask` is 1.
+ *
+ * \hideinitializer
+ */
+#define setGpioPortPullup(  portName, pullup, mask ) \
+                    _setGpioPortPullup( portName, pullup, mask )
+
+
+
+/*!
+ * \brief Writes high- or low-voltage-levels to some (or all) of the pins of a GPIO-port.
+ * Modified pins should be outputs!
+ *
+ * \arg \c portName A GPIO Port name macro generated by GpioPport()
+ *
+ * \arg \c voltageLevels An 8-Bit-value. If a bit in `voltageLevels` is 1, and the corresponding bit in `mask` is
+ *         also 1, a high-voltage-level appears on the output-pin. If a bit in `voltageLevels` is 0, and the
+ *         corresponding bit in `mask` is 1, a low-voltage-level appears on the output-pin.
+ * \arg \c mask Only those GPIO-pins of a GPIO-port are modified, whose corresponding bit in `mask` is 1.
+ *
+ * \hideinitializer
+ */
+#define writeGpioPort( portName, voltageLevels, mask ) \
+                    _writeGpioPort( portName, voltageLevels, mask )
+
+
+
+/*!
+ * \brief Reads in the voltage-levels of some (or all) of the pins of a GPIO-port.
+ * This works for input-pins as well as for output-pins.
+ *
+ * \arg \c portName A GPIO Port name macro generated by GpioPport()
+ *
+ * \arg \c mask If a bit in `mask` is 0, the corresponding bit in the return-value will also be 0.
+ *
+ * \returns An 8-Bit-Pattern. If a bit in the return-value is 1, the voltage of the corresponding pin is a high-level.
+ *          If a bit in the return-value is 0, either the bit has been masked out by `mask,. or the voltage-level of
+ *          the pin is low.
+ *
+ * \hideinitializer
+ */
+#define readGpioPort( portName, mask ) \
+                    _readGpioPort( portName, mask )
+
+
+
+/*!
+ * \brief Toggles the voltage-levels to some (or all) of the pins of a GPIO-port.
+ * Modified pins should be outputs!
+ *
+ * \arg \c portName A GPIO Port name macro generated by GpioPport()
+ *
+ * \arg \c mask Only the voltage-levels of those GPIO-pins of a GPIO-port are toggled, whose corresponding bit in
+ *        `mask` is 1.
+ *
+ * \hideinitializer
+ */
+#define toggleGpioPort( portName, mask ) \
+                    _toggleGpioPort( portName, mask )
+
+
+
+////////////////////////////////////////////////////////////////////////
+// Class-Interface for GPIO-Pins
+////////////////////////////////////////////////////////////////////////
+
+typedef   volatile uint8_t*    sfr8Ptr;
+typedef   volatile uint16_t*   sfr16Ptr;
+
+/*!
+ * A class for single GPIO-Pins.
+ */
+class GpioPinObject
+{
+
+public:
+
+    /*!
+     * Constructor. Instantiate an object of this class by using the `makePinObject`- and the `GpioPin`-macros.
+     * For example: Create Object for second Pin on Port D (PD2):
+     * ```C
+     * GpioPinObject pd2 = makeGpioPinObject( GpioPin( D, 2 ) );
+     * ```
+     */
+    GpioPinObject( sfr8Ptr ddrAdr, sfr8Ptr portAdr, sfr8Ptr pinAdr,
+                   uint8_t pinNumber)
+            : mDdrAdr(ddrAdr)
+            , mPortAdr(portAdr)
+            , mPinAdr(pinAdr)
+            , mPinNumber(pinNumber)
+    { }
+
+    /*! \returns non-zero (true), if the Gpio-Pin is an output, otherwise zero (false) */
+    uint8_t isOutput() { return     *mDdrAdr & (1<<mPinNumber)  ; }
+
+    /*! \returns non-zero (true), if the Gpio-Pin is an intput, otherwise zero (false) */
+    uint8_t isInput()  { return ! ( *mDdrAdr & (1<<mPinNumber) ); }
+
+    /*! Sets the mode of the Gpio-Pin to output  */
+    void setModeOutput() { *mDdrAdr |= (1<<mPinNumber); }
+
+    /*! Sets the mode of the Gpio-Pin to input (with deactivated internal pullup-resistor) */
+    void setModeInput() { *mDdrAdr &= ~(1<<mPinNumber); *mPortAdr &= ~(1<<mPinNumber); }
+
+    /*! Sets the mode of the Gpio-Pin to input with activated internal pullup-resistor */
+    void setModeInputPullup() { *mDdrAdr &= ~(1<<mPinNumber); *mPortAdr |= (1<<mPinNumber); }
+
+    /*!
+     * Returns the voltage-level at the GPIO-Pin
+     *
+     * \returns `cLow` (0) for a low-voltage-Level, `cHigh` (1) for a high-voltage-level
+     */
+    uint8_t readDigital() {return (*mPinAdr & (1<<mPinNumber))>>mPinNumber; }
+
+    /*!
+     * Writes a voltage-level to the GPIO-Pin, if it is an output.
+     *
+     * \arg \c value Write a high-level if `value` is non-zero, and a low-level if `value` is 0.
+     */
+    void writeDigital( uint8_t value )
+    {
+        if ( ! (*mDdrAdr & (1<<mPinNumber)) ) return;
+        if (value) *mPortAdr |=  (1<<mPinNumber);
+        else       *mPortAdr &=~ (1<<mPinNumber);
+    }
+
+    /*! toggles the voltage-level of the GPIO-Pin, if it is an output. */
+    void toggle()
+    {
+        if ( ! (*mDdrAdr & (1<<mPinNumber)) ) return;
+        *mPortAdr ^= (1<<mPinNumber);
+    }
+
+
+
+private:
+    sfr8Ptr  mDdrAdr;
+    sfr8Ptr  mPortAdr;
+    sfr8Ptr  mPinAdr;
+    uint8_t  mPinNumber;
+
+};
+
+
+//internal macro - not used by end-user
+#define _makeGpioPinObject( ddr, port, pin, nbr )      GpioPinObject( &ddr, &port, &pin, nbr )
+
+/*!
+ * Macro for initializing an instance of a `GpioPinObject`
+ * \see Constructor of `GpioPinObject`
+ */
+#define makeGpioPinObject( pinName )                    _makeGpioPinObject( pinName )
+
+
+////////////////////////////////////////////////////////////////////////
+// Class-Interface for GPIO-Ports (eight pins)
+////////////////////////////////////////////////////////////////////////
+
+/*!
+ * A class for a GPIO-Port (8 pins).
+ */
+class GpioPortObject
+{
+public:
+
+    /*!
+     * Constructor. Instantiate an object of this class by using the `makePortObject`- and the `GpioPort`-macros.
+     * For example: Create Object for Port D:
+     * ```C
+     * GpioPortObject portD = makeGpioPortObject( GpioPort( D ) );
+     * ```
+     */
+    GpioPortObject( sfr8Ptr ddrAdr, sfr8Ptr portAdr, sfr8Ptr pinAdr)
+            : mDdrAdr(ddrAdr)
+            , mPortAdr(portAdr)
+            , mPinAdr(pinAdr)
+    { }
+
+    /*!
+     * \returns an 8-Bit-value. If a bit of the return-value is 0, the corresponding pin is an input. If the bit
+     * is 1, the pin is an output.
+     */
+    uint8_t getMode() { return *mDdrAdr; }
+
+    /*!
+     * Sets the mode of some (or all) pins of the port to input or output.
+     *
+     * \arg \c mode An 8-Bit-value. If the corresponding bit in `mask`is 1, a 1-Bit in `mode` makes the corresponding pin an output, a 0-Bit an input.
+     * \arg \c mask An 8-Bit-value. Only pins are affected, whose corresponding bit in `mask` is 1. The other pins remain unchanged. Default 0xFF: All 8 pins are affected
+     */
+    void setMode( uint8_t mode, uint8_t mask = 0xFF )
+    { 
+        *mDdrAdr |= (mode & mask); 
+        *mDdrAdr &= ~(~mode & mask); 
+    }
+
+    /*!
+     * \returns an 8-bit-value. 1-Bits represent for an activated pullup-resistor of the corresponding input. A 0-Bit means that the pullup-resistor is deactivated, or that the pin is an output.
+     */
+    uint8_t getPullup()
+    { return ~(*mDdrAdr) & *mPortAdr; }
+
+    /*!
+     * Activates or deactivates the internal pullup-resistor of some (or all) input-pins of the port.
+     *
+     * \arg \c mode An 8-Bit-value. If the corresponding bit in `mask`is 1 and the pin is an input, a 1-Bit in `pullup` activates the corresponding internal pullup-resistor, a 0-Bit deactivates it.
+     * \arg \c mask An 8-Bit-value. Only pins are affected, whose corresponding bit in `mask` is 1. The other pins remain unchanged. Default 0xFF: All 8 pins are affected
+     */
+    void setPullup( uint8_t pullup, uint8_t mask = 0xFF )
+    { 
+        *mPortAdr |= (pullup & mask & ~(*mDdrAdr)); 
+        *mPortAdr &= ~(~pullup & mask & ~(*mDdrAdr)); 
+    }
+
+    /*!
+     * Sets the voltage-level of the output-pins to low or high.
+     *
+     * \arg \c value An 8-Bit-value. If the corresponding bit in `mask`is 1 and the pin is an output, a 1-Bit in `value` results in a high-voltage-level, a 0-Bit in a low-voltage-level.
+     * \arg \c mask An 8-Bit-value. Only pins are affected, whose corresponding bit in `mask` is 1. The other pins remain unchanged. Default 0xFF: All 8 pins are affected
+     */
+    void writeDigital( uint8_t value, uint8_t mask = 0xFF )
+    { 
+        *mPortAdr |= (value & mask & (*mDdrAdr)); 
+        *mPortAdr &= ~(~value & mask & (*mDdrAdr)); 
+    }
+
+    /*!
+     * Returns the voltage-level of the all pins of the port (for inputs and for outputs).
+     *
+     * \arg \c mask An 8-Bit-value. Only the voltage-levels of pins are returned, whose corresponding bit in `mask` is 1. If a `mask`-bit is 0, the corresponding bit in the return-value is 0. Default-value for `mask`is 0xFF (read all inputs).
+     * \returns An 8-Bit-value. If a bit in the return-value is 1, the voltage-level of the corresponding input is high. If a bit in the return-value is 0, the voltage-level is low, or the bit has been masked out by `mask`.
+     */
+    uint8_t readDigital( uint8_t mask = 0xFF )
+    { return *mPinAdr & mask; }
+
+    /*!
+     * Toggles the voltage-level of some (or all) output-pins of the port.
+     *
+     * \arg \c mask An 8-Bit-value. Only the voltage-levels of those output-pins are toggled, whose corresponding bit in `mask` is 1. Default-value for `mask`is 0xFF (toggle all outputs).
+     */
+    void toggle( uint8_t mask = 0xFF )
+    { *mPortAdr ^= *mDdrAdr & mask; }
+
+private:
+    sfr8Ptr  mDdrAdr;
+    sfr8Ptr  mPortAdr;
+    sfr8Ptr  mPinAdr;
+};
+
+//internal macro - not used by end-user
+#define _makeGpioPortObject( ddr, port, pin )      GpioPortObject( &ddr, &port, &pin )
+
+/*!
+ * Macro for initializing an instance of a `GpioPortObject`
+ * \see Constructor of `GpioPortObject`
+ */
+#define makeGpioPortObject( portName )                    _makeGpioPortObject( portName )
+
+
+#endif
