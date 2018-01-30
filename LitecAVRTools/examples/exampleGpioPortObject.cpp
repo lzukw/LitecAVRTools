@@ -2,9 +2,7 @@
     exampleGpioPort_C_style.cpp - example manipulating all 8 pins of a
     GPIO-port using macros (that behave like C-functions).
 
-    For AVR ATMega328p (Arduino Uno) and ATMega2560 (Arduino Mega).
-    This is part of the LitecAVRTools library (a fork of the
-    AVRTools-library from Igor Mikolic-Torreira).
+    This is part of the LitecAVRTools library.
 
     Copyright (c) 2018 Wolfgang Zukrigl
 

@@ -1,6 +1,9 @@
 /*
     exampleExtInts_Object.cpp - Test-Module for ExternalInterrupts.h/.cpp
-    This is part of the LitecAVRTools-Library.
+    using C++-objects
+
+    This is part of the LitecAVRTools library.
+
     Copyright (c) 2018 Wolfgang Zukrigl
 
     This program is free software: you can redistribute it and/or modify

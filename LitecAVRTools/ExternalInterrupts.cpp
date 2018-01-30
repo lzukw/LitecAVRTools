@@ -1,8 +1,9 @@
 /*
-    ExternalInterrupts.cpp - A Library for Interrupts caused by 
+    ExternalInterrupts.cpp - A module for Interrupts caused by
     voltage-level-changes on the INTx-Pins of AVR-Microcontrollers
-    (The so called external Interrupt-Pins).
+
     This is part of the LitecAVRTools-Library.
+
     Copyright (c) 2018 Wolfgang Zukrigl
 
     This program is free software: you can redistribute it and/or modify

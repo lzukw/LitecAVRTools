@@ -1,12 +1,14 @@
 /*
     GpioPinMacros.h - Macros for naming and manipulating Arduino pins and
-    ports.
-    For AVR ATMega328p (Arduino Uno) and ATMega2560 (Arduino Mega).
-    This is part of the LitecAVRTools library (a fork of the 
-    AVRTools-library from Igor Mikolic-Torreira).
+    ports, and two classes for pins and ports.
 
-    Copyright (c) 2014 Igor Mikolic-Torreira.  All right reserved.
+    This is part of the LitecAVRTools library.
+
     Copyright (c) 2018 Wolfgang Zukrigl
+
+    Much of this file is copied from Igor Mikolic-Torreira's great
+    AVRTools-Library
+    Copyright (c) 2014 Igor Mikolic-Torreira.  All right reserved.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,7 +108,7 @@ enum
 #define _GpioPort( ddr, port, pin )  \
                             ddr, port, pin
                                         
-#define _setGpioPortMode( ddr, port, pin, mode, mask )                         ddr |= (mode & mask), ddr &= ~( ~mode & mask )
+#define _setGpioPortMode( ddr, port, pin, mode, mask )                          ddr |= (mode & mask), ddr &= ~( ~mode & mask )
 
 #define _setGpioPortPullup( ddr, port, pin, pullup, mask )                      port |= (pullup & mask), port &= ~( ~pullup & mask )
 
