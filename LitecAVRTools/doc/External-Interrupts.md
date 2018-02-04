@@ -75,3 +75,20 @@ ISR(INT3_vect)
    counter++;
 }
 ```
+
+## Object-oriented interface ##
+
+Instead of using the functions `setExtIntEventType()`, `enableExtInt()`, 
+`disableExtInt()` and `clearPendingExtIntEvent()`, an instance of the 
+`ExtInt`-class can be used. The following example uses external Interrupt
+number 3 (INT3).
+
+```C
+ExtInt extInt3 = ExtInt( 3, EXTINT_FALLING_EDGE );
+extInt3.enable();
+```
+
+The event-type is set, when creating an object. But later it can be changed,
+using the `setExtIntEventType`-method. To clear a pending Interrupt-Event
+before enabling the external Interrupt, the method `clearPendingEvent()` can
+be used.

@@ -112,11 +112,6 @@ enum UsartConfiguration
  * A class for USARTs of AVR-microcontrollers. The ATmega328p has only one USART, the ATmega2560 has four
  */
 class Usart {
-private:
-    //Only for internal use (callback-Functions for FILE-struct used by vfprintf() and vfscanf()
-    static int s_usartPut( char c, FILE* stream );
-    static int s_usartGet( FILE* stream );
-
 public:
 
     /*!
@@ -219,6 +214,12 @@ public:
      */
     int16_t receiveByteNonBlocking();
 
+    /*!
+     * Returns 0, if no byte has been received. Non-zero is returned, if a byte has been received, and not yet fetched 
+     * by the `receiveByte()` or `receiveByteNonBlocking()`-method.
+     */
+     uint8_t byteAvailable()
+     { return *m_ucsra & (1<<RXC0); }
 
     /*!
      * printf() for the usart. Use it exactly as you would use printf. For example:
@@ -243,6 +244,10 @@ public:
     int usartScanf(const char* fmt, ...);
 
 private:
+
+    //Only for internal use (callback-Functions for FILE-struct used by vfprintf() and vfscanf()
+    static int s_usartPut( char c, FILE* stream );
+    static int s_usartGet( FILE* stream );
 
     sfr8Ptr  m_ucsra;
     sfr8Ptr  m_ucsrb;
