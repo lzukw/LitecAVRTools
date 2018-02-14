@@ -89,7 +89,7 @@ int main()
     //globally enable interrupts
     sei();
     
-    uint8_t lastButtonState = cHigh;
+    uint8_t lastButtonState = c_High;
     
     while(1)
     {
@@ -98,7 +98,7 @@ int main()
         if ( actualButtonState != lastButtonState )
         {
             //Button on pd3 has been pressed or released
-            if (actualButtonState == cLow)
+            if (actualButtonState == c_Low)
             {
                 //button has been pressed -> disable INT2-Interrupt
                 eint2.disable();

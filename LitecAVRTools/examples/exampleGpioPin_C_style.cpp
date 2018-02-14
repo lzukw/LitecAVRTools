@@ -50,18 +50,18 @@ int main(void)
 	//with 220 Ohm-resistors between VCC and the pins).
     setGpioPinModeOutput( ledPinPB0 );
     setGpioPinModeOutput( GpioPin( B, 1 ) );
-    writeGpioPinDigital( ledPinPB0, cLow);
-    writeGpioPinDigital( GpioPin( B, 1), cHigh);
+    writeGpioPinDigital( ledPinPB0, c_Low);
+    writeGpioPinDigital( GpioPin( B, 1), c_High);
 
 
-    uint8_t oldbuttonState = cHigh;
+    uint8_t oldbuttonState = c_High;
 
     while (1)
     {
         //check for rising edges on input-pin pd2 (these occur on releasing
         //the button):
         uint8_t buttonState = readGpioPinDigital( buttonPinPD2 );
-        if ( oldbuttonState == cLow && buttonState == cHigh)
+        if ( oldbuttonState == c_Low && buttonState == c_High)
         {
 
         	toggleGpioPin( ledPinPB0 );

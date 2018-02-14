@@ -52,19 +52,19 @@ int main()
     //with 220 Ohm-resistors between VCC and the pins).
     GpioPinObject led0 = makeGpioPinObject( ledPinPB0 );
     led0.setModeOutput();
-    led0.writeDigital(cLow);
+    led0.writeDigital(c_Low);
     GpioPinObject led1 = makeGpioPinObject( GpioPin( B, 1 ) );
     led1.setModeOutput();
-    led1.writeDigital(cHigh);
+    led1.writeDigital(c_High);
 
-    uint8_t oldbuttonState = cHigh;
+    uint8_t oldbuttonState = c_High;
 
     while(1)
     {
         //check for rising edges on input-pin pd2 (these occur on releasing
         //the button):
         uint8_t buttonState = button.readDigital();
-        if ( oldbuttonState == cLow && buttonState == cHigh)
+        if ( oldbuttonState == c_Low && buttonState == c_High)
         {
 
             led0.toggle();
