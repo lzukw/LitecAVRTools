@@ -213,7 +213,9 @@ void TimerCounter16Bit::forceOutputCompareMatch( Timer16_CompChannel channels)
 
     if (channels & T16_COMP_A)    tccrncValue |= (1<<FOC1A);
     if (channels & T16_COMP_B)    tccrncValue |= (1<<FOC1B);
+    #ifdef OCR1C
     if (channels & T16_COMP_C)    tccrncValue |= (1<<FOC1C);
+    #endif
 
     *m_tccrnc = tccrncValue;
 }
