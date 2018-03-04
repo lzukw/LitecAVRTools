@@ -50,7 +50,7 @@ TimerCounter16Bit tc1 = makeTimerCounter16BitObject( 1 );
 int main()
 {
     ledPin.setModeOutput();
-    initTimer0AsSystemClock();
+    initTimer0AsSystemClock(); //for delayMilliseconds() in main()
     sei();
 
     //Timer1 in normal-mode, prescaler-value 1024, OCR1A-value set to

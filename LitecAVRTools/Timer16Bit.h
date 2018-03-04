@@ -34,18 +34,6 @@
 //////////////////////////////////////////////////////////////////////////
 
 /*!
- * The available 16-Bit-Timer/Counters. The ATmeaga2560 has all of these. The ATmega328p only has Timer/Counter 1.
- * See 16-Bit-Timer-section of the datasheet for other AVR-microcontrollers.
- */
-enum TimerCounter16
-{
-    T16_1 = 1,   /* 16 Bit Timer/Counter 1*/
-    T16_3 = 3,   /* 16 Bit Timer/Counter 3 */
-    T16_4 = 4,   /* 16 Bit Timer/Counter 4 */
-    T16_5 = 5    /* 16 Bit Timer/Counter 5 */
-};
-
-/*!
  * Operating-modes for Timer/Counters. These modes define, how the Timer/Counter counts its internal
  * Count-Value (TCNTx-Register) up and down.
  * The hex-value represents the WGMn[3..0]-Bits in the TCCRxA and TCCRxB-Registers
@@ -182,10 +170,6 @@ public:
      * For example: Create an Object for Timer/Counter 1
      * ```C
      * TimerCounter16Bit myTimer = makeTimerCounter16BitObject( 1 );
-     * ```
-     * or
-     * ```C
-     * TimerCounter16Bit myTimer = makeTimerCounter16BitObject( TIMER16_1 );
      * ```
      */
     TimerCounter16Bit(sfr8Ptr tccrna , sfr8Ptr tccrnb, sfr8Ptr tccrnc, sfr16Ptr tcntn, sfr16Ptr ocrna,
@@ -401,7 +385,7 @@ private:
  * Use this macro to initialize a `TimerCounter16Bit`-Object.
  *
  * \arg \c no is the Number of the 16-Bit-Timer/COutner. For the Atmega2560 this is 1, 3, 4, 5, for the
- * Atmega328p `no` must be 1. You can use one of the `T16_n`-enum constants (n is the Timer/Counter-number).
+ * Atmega328p `no` must be 1.
  *
  * \see enum `TimerCounter16` and the constructor of `TimerCounter16Bit`
  */
