@@ -49,17 +49,17 @@ int8_t TimerCounter16Bit::setTopValue( uint16_t topCountValue )
 {
     switch ( getMode() ) {
 
-        case T16_CTC_OCRXA:
-        case T16_PWM_PHI_F_CORRECT_OCRXA:
-        case T16_PWM_PHI_CORRECT_OCRXA:
-        case T16_FAST_PWM_OCRXA:
+        case T16_CTC_OCRNA:
+        case T16_PWM_PHI_F_CORRECT_OCRNA:
+        case T16_PWM_PHI_CORRECT_OCRNA:
+        case T16_FAST_PWM_OCRNA:
             *m_ocrna = topCountValue;
             return 0;
 
-        case T16_PWM_PHI_F_CORRECT_ICRX:
-        case T16_PWM_PHI_CORRECT_ICRX:
+        case T16_PWM_PHI_F_CORRECT_ICRN:
+        case T16_PWM_PHI_CORRECT_ICRN:
         case T16_CTC_ICRN:
-        case T16_FAST_PWM_ICRX:
+        case T16_FAST_PWM_ICRN:
             *m_icrn = topCountValue;
             return 0;
 
@@ -74,16 +74,16 @@ int8_t TimerCounter16Bit::setTopValue( uint16_t topCountValue )
 uint16_t TimerCounter16Bit::getTopValue()
 {
     switch ( getMode() ) {
-        case T16_CTC_OCRXA:
-        case T16_PWM_PHI_F_CORRECT_OCRXA:
-        case T16_PWM_PHI_CORRECT_OCRXA:
-        case T16_FAST_PWM_OCRXA:
+        case T16_CTC_OCRNA:
+        case T16_PWM_PHI_F_CORRECT_OCRNA:
+        case T16_PWM_PHI_CORRECT_OCRNA:
+        case T16_FAST_PWM_OCRNA:
             return *m_ocrna;
 
-        case T16_PWM_PHI_F_CORRECT_ICRX:
-        case T16_PWM_PHI_CORRECT_ICRX:
+        case T16_PWM_PHI_F_CORRECT_ICRN:
+        case T16_PWM_PHI_CORRECT_ICRN:
         case T16_CTC_ICRN:
-        case T16_FAST_PWM_ICRX:
+        case T16_FAST_PWM_ICRN:
             return *m_icrn;
 
         case T16_PWM_PHI_CORRECT_0XFF:

@@ -25,12 +25,12 @@
 
 /*
     A software-PWM-signal is created with Timer/Counter 1 in CTC-mode.
-    The software PWM-signal is put out on Port B, pin 7, and has a period of
+    The software PWM-signal is put out on Port C, pin 1, and has a period of
     20ms (if main-oscillator-frequency is 16MHz). The duty-cycle starts at
     5% and increases within 11 seconds to 10%. Then it starts again
     from 5% .
 
-    Connect an LED or a servo to pin PB7 to test this example.
+    Connect a LED or an RC-servo to pin PC1 to test this example.
  */
 
 #include <avr/interrupt.h>
@@ -42,7 +42,7 @@
 #include "Usart.h"
 
 
-GpioPinObject pwmPin  = makeGpioPinObject( GpioPin( B, 7 ) );
+GpioPinObject pwmPin  = makeGpioPinObject( GpioPin( C, 1 ) );
 TimerCounter16Bit tc1 = makeTimerCounter16BitObject( 1 );
 Usart usart0 = makeUsartObject( 0 );
 
@@ -65,7 +65,7 @@ int main()
 
     //Timer1 in CTC-mode, prescaler-value 8, OCR1A-value (TOP-value) set to 39999,
     //Compare-match-A- and Compare-match-B-Interrupts enabled, OCR1B (compare-match-B-register) set initially to 1000
-    tc1.setMode( T16_CTC_OCRXA );
+    tc1.setMode( T16_CTC_OCRNA );
     tc1.setTopValue(39999); //with prescaler 8 and 16MHz this results in 20ms period.
     tc1.setCompareMatchValue( T16_COMP_B, offValue ); //start with 5% duty cycle
     tc1.enableInterrupts( T16_INT_COMP_MATCH_A | T16_INT_COMP_MATCH_B );

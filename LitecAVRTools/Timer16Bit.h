@@ -44,18 +44,18 @@ enum Timer16_mode
     T16_PWM_PHI_CORRECT_0XFF =         0x01,
     T16_PWM_PHI_CORRECT_0X1FF =        0x02,
     T16_PWM_PHI_CORRECT_0X3FF =        0x03,
-    T16_CTC_OCRXA =                    0x04,
+    T16_CTC_OCRNA =                    0x04,
     T16_FAST_PWM_0xFF =                0x05,
     T16_FAST_PWM_0X1FF =               0x06,
     T16_FAST_PWM_0X3FF =               0x07,
-    T16_PWM_PHI_F_CORRECT_ICRX =       0x08,
-    T16_PWM_PHI_F_CORRECT_OCRXA =      0x09,
-    T16_PWM_PHI_CORRECT_ICRX =         0x0A,
-    T16_PWM_PHI_CORRECT_OCRXA =        0x0B,
+    T16_PWM_PHI_F_CORRECT_ICRN =       0x08,
+    T16_PWM_PHI_F_CORRECT_OCRNA =      0x09,
+    T16_PWM_PHI_CORRECT_ICRN =         0x0A,
+    T16_PWM_PHI_CORRECT_OCRNA =        0x0B,
     T16_CTC_ICRN =                     0x0C,
     //Timer Mode 0x0D is reserved
-    T16_FAST_PWM_ICRX =                0x0E,
-    T16_FAST_PWM_OCRXA =               0x0F
+    T16_FAST_PWM_ICRN =                0x0E,
+    T16_FAST_PWM_OCRNA =               0x0F
 };
 
 /*!
