@@ -79,20 +79,20 @@ int main()
     {
         setGpioPinModeOutput( GpioPin ( A, ledNo ) );
         //High-level turns LED off:
-        writeGpioPinDigital( GpioPin ( A, ledNo), cHigh );
+        writeGpioPinDigital( GpioPin ( A, ledNo), c_High );
     }
 
     //turn on LED number <actualLed>
-    writeGpioPinDigital( GpioPin( A, actualLed ), cLow );
+    writeGpioPinDigital( GpioPin( A, actualLed ), c_Low );
 
     while(1)
     {
         //is button pushed (produces a Low-voltage-level)?
         //if yes: switch to next LED
-        if (readGpioPinDigital( buttonPin ) == cLow )
+        if (readGpioPinDigital( buttonPin ) == c_Low )
         {
             //instead of
-            //writeGpioPinDigital( GpioPin( A, actualLed ), cHigh) :
+            //writeGpioPinDigital( GpioPin( A, actualLed ), c_High) :
             setGpioPinHigh( GpioPin ( A, actualLed) ); //turn off Led
             actualLed++; //switch to next LED
             if ( actualLed > 3 )

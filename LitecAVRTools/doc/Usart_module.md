@@ -5,7 +5,8 @@ The USARTs of the ATmega-Microcontroller are normally used as serial interface
 (USART0, USART1, USART2 and USART3).
 
 To use the USART-module of the LitecAVRTools-Library, add the files
-"Usart.h" and "Usart.cpp" to your project, and #include "Usart.h". 
+"GpioPinMacros.h" "Usart.h" and "Usart.cpp" to your project, and 
+`#include "Usart.h"`. 
 
 There is only an object-oriented interface. 
 

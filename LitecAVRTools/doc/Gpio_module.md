@@ -12,9 +12,9 @@ Set the mode of the GPIO-Pin PA2 to output. Then put out a High-voltage-
 level on PA2.
 ```C
 setGpioPinModeOutput( GpioPin( A, 2) );
-writeGpioPinDigital( GpioPin( A, 2), cHigh );
+writeGpioPinDigital( GpioPin( A, 2), c_High );
 ```
-Instead of using the constants `cHigh` and `cLow`, the values 1 and 0 can be
+Instead of using the constants `c_High` and `c_Low`, the values 1 and 0 can be
 used.
 
 Intstead of using `writeGpioPinDigital()` the voltage-levels of the output PA2
@@ -35,7 +35,7 @@ setGpioPinModeInputPullup( GpioPin( D, 3) );
 
 Read in the voltage-level of pin PD3:
 ```C
-if (readGpioPinDigital( GpioPin( D, 3) ) == cLow)
+if (readGpioPinDigital( GpioPin( D, 3) ) == c_Low)
 { ... }
 ```
 
@@ -51,7 +51,7 @@ can be used. For example the following is possible:
 int i;
 for (i=0; i<4; i++)
 {
-    writeGpioPinDigital( GpioPin( D, i), cLow );
+    writeGpioPinDigital( GpioPin( D, i), c_Low );
 }
 ```
 
@@ -67,7 +67,7 @@ high-voltage-level:
 ```C
 GpioPinObject ledPin = makeGpioPinObject( GpioPin( A, 2) );
 ledPin.setModeOutput();
-ledPin.writeDigital( cHigh );
+ledPin.writeDigital( c_High );
 ```
 The following line toggles the voltage-level of `ledPin` output-pin PA2:
 ```C
@@ -80,7 +80,7 @@ GpioPinObject buttonPin = makeGpioPinObject( GpioPin( D, 2) );
 buttonPin.setModeInput();
 uint8_t level = buttonPin.readDigital();
 ```
-The result `level` will either be 0 (cLow) or 1 (cHigh).
+The result `level` will either be 0 (c_Low) or 1 (c_High).
 
 To set a GpioPinObject's mode to input with activated internal pullup-
 resistor, use the method `setModeInputPullup()` instead of `setModeInput()`.
