@@ -80,7 +80,7 @@ tc1.selectClockSource( T16_PRESC_1024 );
 
 To get the actual count-Value (content of the TCNTn-Register) use:
 ```C
-uint16_t i = getActualCountValue();
+uint16_t i = tc1.getActualCountValue();
 ```
 
 In some modes of operation a TOP-count-value can be set. If the 
